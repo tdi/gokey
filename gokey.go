@@ -1,10 +1,10 @@
 package main
 
 import (
-  "keystok"
-  "fmt"
-  "flag"
-  "os"
+	"flag"
+	"fmt"
+	"keystok"
+	"os"
 )
 
 var verbose bool
@@ -14,20 +14,20 @@ func print_help() {
 	os.Exit(0)
 }
 
-func print_list_keys(keys map[string]string ) {
+func print_list_keys(keys map[string]string) {
 
-    if verbose {
+	if verbose {
 		fmt.Printf("KEY ID                         DESCRIPTION\n")
 		fmt.Printf("------------------------------ ------------------------------------------\n")
 		for k, v := range keys {
-      fmt.Printf("%-30s %s\n", k, v)
+			fmt.Printf("%-30s %s\n", k, v)
 		}
 
-    } else {
+	} else {
 		for k, _ := range keys {
-      fmt.Println(k)
+			fmt.Println(k)
 		}
-  }
+	}
 }
 
 func main() {
@@ -35,8 +35,8 @@ func main() {
 	accessTokenPtr := flag.String("a", "", "access token")
 	cacheDirPtr := flag.String("c", "", "cache dir location")
 	verbosePtr := flag.Bool("v", false, "verbose")
-  useCachePtr := flag.Bool("nc", true, "no cache, default true")
-  flag.Parse()
+	useCachePtr := flag.Bool("nc", true, "no cache, default true")
+	flag.Parse()
 
 	if len(os.Args) < 2 {
 		print_help()
@@ -45,7 +45,7 @@ func main() {
 	var access_token string = os.Getenv("KEYSTOK_ACCESS_TOKEN")
 	var cache_dir string = os.Getenv("KEYSTOK_CACHE_DIR")
 
-  verbose = *verbosePtr
+	verbose = *verbosePtr
 	access_token = *accessTokenPtr
 	cache_dir = *cacheDirPtr
 
@@ -54,9 +54,9 @@ func main() {
 		print_help()
 	}
 
-  var kc keystok.KeystokClient = keystok.GetKeystokClient(access_token)
-  kc.Opts.CacheDir = cache_dir
-  kc.Opts.UseCache = *useCachePtr
+	var kc keystok.KeystokClient = keystok.GetKeystokClient(access_token)
+	kc.Opts.CacheDir = cache_dir
+	kc.Opts.UseCache = *useCachePtr
 
 	var command string = ""
 
@@ -69,9 +69,9 @@ func main() {
 	}
 
 	if command == "ls" {
-    print_list_keys(kc.ListKeys())
+		print_list_keys(kc.ListKeys())
 	} else {
 		fmt.Println(kc.GetKey(os.Args[len(os.Args)-1]))
 	}
-  os.Exit(0)
+	os.Exit(0)
 }

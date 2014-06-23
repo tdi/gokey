@@ -20,22 +20,22 @@ import (
 var Version = 0.2
 
 type KeystokClient struct {
-  Access_token AccessToken
-  Opts KeystokOptions
+	Access_token AccessToken
+	Opts         KeystokOptions
 }
 
 func GetKeystokClient(access_token string) KeystokClient {
-  options := KeystokOptions{"https://api.keystok.com", "https://keystok.com", "", true}
-  atk:= decode_access_token(access_token)
-  return KeystokClient{Access_token: atk, Opts: options}
+	options := KeystokOptions{"https://api.keystok.com", "https://keystok.com", "", true}
+	atk := decode_access_token(access_token)
+	return KeystokClient{Access_token: atk, Opts: options}
 }
 
-func (k * KeystokClient) GetKey(name string) string {
-  return k.get_key(k.Access_token, name)
+func (k *KeystokClient) GetKey(name string) string {
+	return k.get_key(k.Access_token, name)
 }
 
-func (k * KeystokClient) ListKeys() map[string]string {
-  return k.list_keys(k.Access_token)
+func (k *KeystokClient) ListKeys() map[string]string {
+	return k.list_keys(k.Access_token)
 
 }
 
@@ -43,7 +43,7 @@ type KeystokOptions struct {
 	APIHost  string
 	AuthHost string
 	CacheDir string
-  UseCache bool
+	UseCache bool
 }
 
 type AccessToken struct {
@@ -53,9 +53,7 @@ type AccessToken struct {
 	AccessToken   string
 }
 
-
-
-func (k * KeystokClient) get_key(atk AccessToken, key_id string) string {
+func (k *KeystokClient) get_key(atk AccessToken, key_id string) string {
 	api_host := k.Opts.APIHost
 	atk.AccessToken = k.refresh_access_token(atk)
 	var url string = fmt.Sprintf("%s/apps/%d/deploy/%s?access_token=%s", api_host, atk.Id, key_id,
@@ -71,10 +69,10 @@ func (k * KeystokClient) get_key(atk AccessToken, key_id string) string {
 		panic(err)
 	}
 	key := k.decrypt_key(atk, string(dat[key_id]["key"].(string)))
-  return key
+	return key
 }
 
-func (k * KeystokClient) decrypt_key(atk AccessToken, key string) string {
+func (k *KeystokClient) decrypt_key(atk AccessToken, key string) string {
 	if !strings.HasPrefix(key, ":aes256:") {
 		panic("Not supported")
 	}
@@ -101,7 +99,7 @@ func (k * KeystokClient) decrypt_key(atk AccessToken, key string) string {
 	return string(ct)
 }
 
-func (k * KeystokClient) list_keys(atk AccessToken) map[string]string {
+func (k *KeystokClient) list_keys(atk AccessToken) map[string]string {
 	api_host := k.Opts.APIHost
 	atk.AccessToken = k.refresh_access_token(atk)
 	var url string = fmt.Sprintf("%s/apps/%d/keys?access_token=%s", api_host, atk.Id,
@@ -116,14 +114,14 @@ func (k * KeystokClient) list_keys(atk AccessToken) map[string]string {
 	if err := json.Unmarshal(body, &dat); err != nil {
 		panic(err)
 	}
-    m := make(map[string]string)
-		for _, v := range dat {
-      m[v["id"].(string)] = v["description"].(string)
-		}
-    return m
+	m := make(map[string]string)
+	for _, v := range dat {
+		m[v["id"].(string)] = v["description"].(string)
+	}
+	return m
 }
 
-func (k * KeystokClient) refresh_access_token(atk AccessToken) string {
+func (k *KeystokClient) refresh_access_token(atk AccessToken) string {
 	auth_host := k.Opts.AuthHost + "/oauth/token"
 	access_token := atk.AccessToken
 	refresh_token := atk.RefreshToken
@@ -160,7 +158,7 @@ func (k * KeystokClient) refresh_access_token(atk AccessToken) string {
 	dat2, _ := json.Marshal(dat)
 	err = ioutil.WriteFile(k.Opts.CacheDir+"/access_token", dat2, 0666)
 	if err != nil {
-    //
+		//
 	}
 	return dat["access_token"].(string)
 }
@@ -182,10 +180,10 @@ func decode_access_token(at string) AccessToken {
 	return atk
 }
 
-func (k * KeystokClient) setup_cache() {
-  if k.Opts.UseCache == false {
-    return
-  }
+func (k *KeystokClient) setup_cache() {
+	if k.Opts.UseCache == false {
+		return
+	}
 	if k.Opts.CacheDir != "" {
 		return
 	}
@@ -203,5 +201,3 @@ func (k * KeystokClient) setup_cache() {
 		}
 	}
 }
-
-
