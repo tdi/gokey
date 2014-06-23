@@ -1,7 +1,7 @@
 gokey
 =====
 
-Version: 0.2
+Version: 0.35
 
 [Keystok.com](http://keystok.com) client in Go language, both command line (`gokey`) and a library. 
 
