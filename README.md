@@ -9,7 +9,17 @@ Version: 0.2
 Installation
 ============
 
+`go get code.google.com/p/go.crypto/pbkdf2`
 `go get github.com/tdi/gokey`
+
+
+Configuration
+=============
+
+The access token can be either provided directly, `-a` in a CLI or as an argument in a library, 
+or it can be set in a environmental variable `KEYSTOK_ACCESS_TOKEN`. Similarly, `KEYSTOK_CACHE_DIR`
+can be set to point the location of the cache directory. 
+
 
 CLI usage
 =========
