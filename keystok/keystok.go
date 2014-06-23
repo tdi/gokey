@@ -38,10 +38,13 @@ func GetKeystokClient(access_token string) KeystokClient {
 }
 
 func (k *KeystokClient) GetKey(name string) string {
+  k.setup_cache()
 	return k.get_key(k.Access_token, name)
 }
 
 func (k *KeystokClient) ListKeys() map[string]string {
+  fmt.Println("nie ma katalogu1")
+  k.setup_cache()
 	return k.list_keys(k.Access_token)
 
 }
@@ -192,6 +195,7 @@ func (k *KeystokClient) setup_cache() {
 		return
 	}
 	if k.Opts.CacheDir != "" {
+    fmt.Println("nie ma katalogu")
 		return
 	}
 	usr, _ := user.Current()
@@ -199,6 +203,7 @@ func (k *KeystokClient) setup_cache() {
 	k.Opts.CacheDir = fmt.Sprintf("%s/.keystok", dir)
 	_, err := os.Stat(k.Opts.CacheDir)
 	if err == nil {
+    fmt.Println("nie ma katalogu")
 		return
 	}
 	if os.IsNotExist(err) {
