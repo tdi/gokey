@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
   "github.com/tdi/gokey/keystok"
-	"keystok"
 	"os"
 )
 
