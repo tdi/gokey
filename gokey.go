@@ -8,8 +8,10 @@ import (
 )
 
 var verbose bool
+var version string = "0.3"
 
 func print_help() {
+  fmt.Printf("gokey version: %s, keystok lib version: %s\n", version, keystok.Version)
 	fmt.Println("usage: gokey [-h] [-a ACCESS_TOKEN] [-c CACHE_DIR] [-v] {ls, get} ...")
 	os.Exit(0)
 }
@@ -46,7 +48,9 @@ func main() {
 	var cache_dir string = os.Getenv("KEYSTOK_CACHE_DIR")
 
 	verbose = *verbosePtr
-	access_token = *accessTokenPtr
+  if access_token == "" {
+	  access_token = *accessTokenPtr
+  }
 	cache_dir = *cacheDirPtr
 
 	if access_token == "" {

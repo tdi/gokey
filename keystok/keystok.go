@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var Version = 0.2
+var Version string = "0.3"
 
 type KeystokClient struct {
 	Access_token AccessToken
@@ -25,6 +25,13 @@ type KeystokClient struct {
 }
 
 func GetKeystokClient(access_token string) KeystokClient {
+  access_token = access_token
+  if access_token == "" {
+	  access_token = os.Getenv("KEYSTOK_ACCESS_TOKEN")
+  }
+  if access_token == "" {
+    panic("No access token given")
+  }
 	options := KeystokOptions{"https://api.keystok.com", "https://keystok.com", "", true}
 	atk := decode_access_token(access_token)
 	return KeystokClient{Access_token: atk, Opts: options}
