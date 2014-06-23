@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-var Version string = "0.3"
+var Version string = "0.35"
 
 type KeystokClient struct {
 	Access_token AccessToken
@@ -43,7 +43,6 @@ func (k *KeystokClient) GetKey(name string) string {
 }
 
 func (k *KeystokClient) ListKeys() map[string]string {
-  fmt.Println("nie ma katalogu1")
   k.setup_cache()
 	return k.list_keys(k.Access_token)
 
@@ -195,7 +194,6 @@ func (k *KeystokClient) setup_cache() {
 		return
 	}
 	if k.Opts.CacheDir != "" {
-    fmt.Println("nie ma katalogu")
 		return
 	}
 	usr, _ := user.Current()
@@ -203,8 +201,7 @@ func (k *KeystokClient) setup_cache() {
 	k.Opts.CacheDir = fmt.Sprintf("%s/.keystok", dir)
 	_, err := os.Stat(k.Opts.CacheDir)
 	if err == nil {
-    fmt.Println("nie ma katalogu")
-		return
+	  // no directory, we create one
 	}
 	if os.IsNotExist(err) {
 		err := os.Mkdir(k.Opts.CacheDir, 0777)
