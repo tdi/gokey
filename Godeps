@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/tdi/gokey",
+	"GoVersion": "go1.2.1",
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/go.crypto/pbkdf2",
+			"Comment": "null-212",
+			"Rev": "1064b89a6fb591df0dd65422295b8498916b092f"
+		}
+	]
+}
