@@ -9,15 +9,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
-	"os/user"
 	"strings"
 	"time"
 )
 
-var Version string = "0.35"
+var Version string = "0.4"
 
 type KeystokClient struct {
 	Access_token AccessToken
@@ -25,25 +25,25 @@ type KeystokClient struct {
 }
 
 func GetKeystokClient(access_token string) KeystokClient {
-  access_token = access_token
-  if access_token == "" {
-	  access_token = os.Getenv("KEYSTOK_ACCESS_TOKEN")
-  }
-  if access_token == "" {
-    panic("No access token given")
-  }
+	access_token = access_token
+	if access_token == "" {
+		access_token = os.Getenv("KEYSTOK_ACCESS_TOKEN")
+	}
+	if access_token == "" {
+		panic("No access token given")
+	}
 	options := KeystokOptions{"https://api.keystok.com", "https://keystok.com", "", true}
 	atk := decode_access_token(access_token)
 	return KeystokClient{Access_token: atk, Opts: options}
 }
 
 func (k *KeystokClient) GetKey(name string) string {
-  k.setup_cache()
+	k.setup_cache()
 	return k.get_key(k.Access_token, name)
 }
 
 func (k *KeystokClient) ListKeys() map[string]string {
-  k.setup_cache()
+	k.setup_cache()
 	return k.list_keys(k.Access_token)
 
 }
@@ -167,7 +167,7 @@ func (k *KeystokClient) refresh_access_token(atk AccessToken) string {
 	dat2, _ := json.Marshal(dat)
 	err = ioutil.WriteFile(k.Opts.CacheDir+"/access_token", dat2, 0666)
 	if err != nil {
-		//
+		panic(err)
 	}
 	return dat["access_token"].(string)
 }
@@ -193,20 +193,13 @@ func (k *KeystokClient) setup_cache() {
 	if k.Opts.UseCache == false {
 		return
 	}
-	if k.Opts.CacheDir != "" {
-		return
-	}
-	usr, _ := user.Current()
-	dir := usr.HomeDir
-	k.Opts.CacheDir = fmt.Sprintf("%s/.keystok", dir)
+
 	_, err := os.Stat(k.Opts.CacheDir)
-	if err == nil {
-	  // no directory, we create one
-	}
 	if os.IsNotExist(err) {
 		err := os.Mkdir(k.Opts.CacheDir, 0777)
-		if err == nil {
-			return
+		if err != nil {
+			log.Fatal("Cannot create directory")
+			os.Exit(1)
 		}
 	}
 }

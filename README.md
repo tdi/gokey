@@ -1,9 +1,10 @@
 gokey
 =====
 
-Version: 0.35
+Version: 0.4
 
 [Keystok.com](http://keystok.com) client in Go language, both command line (`gokey`) and a library. 
+
 
 
 Installation
@@ -11,6 +12,7 @@ Installation
 
 `go get code.google.com/p/go.crypto/pbkdf2`
 `go get github.com/tdi/gokey`
+
 
 
 Configuration
@@ -38,9 +40,10 @@ Set access token string
 
 Set a cachedir location
 
-### -nc 
+### -nc ANYTHING
 
 Disable caching at all
+
 
 ### -v 
 
@@ -49,6 +52,7 @@ Set verbose mode on
 
 If not set, caching is enabled with the default directory `~/.keystok`. It works in the
 compatibility mode with the keystok Python client. 
+
 
 Library usage
 =============
@@ -81,6 +85,7 @@ You can also change Options of the `KeystokClient`:
 
 
 ```
+
 
 AUTHOR
 ======
